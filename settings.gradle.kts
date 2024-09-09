@@ -1,1 +1,1 @@
-rootProject.name = "simplified-personal-finance-app"
+rootProject.name = "simple-personal-finance-app"
