@@ -9,6 +9,9 @@ spring:
     username: ${USERNAME}
     password: ${PASSWORD}
 #  schema.sql file will be executed on every application run
+  jpa:
+    properties:
+      hibernate.default_schema: finance
   sql:
     init:
       mode: always
