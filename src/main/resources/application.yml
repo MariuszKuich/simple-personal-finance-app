@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: simple-personal-finance-app
+  datasource:
+    driver-class-name: org.postgresql.Driver
+#    create finance-db in Postgres database before first run
+    url: jdbc:postgresql://localhost:5432/finance-db
+#    supply username and password using environment variables
+    username: ${USERNAME}
+    password: ${PASSWORD}
+#  schema.sql file will be executed on every application run
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:schema.sql
