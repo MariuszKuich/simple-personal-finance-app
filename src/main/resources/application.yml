@@ -16,3 +16,7 @@ spring:
     init:
       mode: always
       schema-locations: classpath:schema.sql
+server:
+  servlet:
+    session:
+      timeout: 30m  # 30 minutes
