@@ -10,6 +10,8 @@ import org.springframework.security.core.context.SecurityContextHolderStrategy
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.context.SecurityContextRepository
 import org.springframework.stereotype.Service
+import pl.mariuszk.user.exception.UserNotAuthenticatedException
+import pl.mariuszk.user.exception.UsernameNotFoundException
 import pl.mariuszk.user.exception.UsernameTakenException
 
 @Service
@@ -37,5 +39,11 @@ class UserService(val userRepository: UserRepository,
         context.authentication = authentication
         securityContextHolderStrategy.context = context
         securityContextRepository.saveContext(context, request, response)
+    }
+
+    fun getAuthenticatedUser(request: HttpServletRequest): User {
+        val username = securityContextHolderStrategy.context?.authentication?.name
+            ?: throw UserNotAuthenticatedException()
+        return userRepository.findByName(username) ?: throw UsernameNotFoundException(username)
     }
 }

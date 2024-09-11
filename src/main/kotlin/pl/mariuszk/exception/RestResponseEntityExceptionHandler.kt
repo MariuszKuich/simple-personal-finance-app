@@ -7,7 +7,10 @@ import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.context.request.WebRequest
+import pl.mariuszk.budget.exception.BudgetAlreadyExistsException
 import pl.mariuszk.config.logger
+import pl.mariuszk.user.exception.UserNotAuthenticatedException
+import pl.mariuszk.user.exception.UsernameNotFoundException
 import pl.mariuszk.user.exception.UsernameTakenException
 
 @ControllerAdvice
@@ -24,10 +27,17 @@ class RestResponseEntityExceptionHandler(
         return ResponseEntity.badRequest().body(errorMessage)
     }
 
-    @ExceptionHandler(UsernameTakenException::class, AuthenticationException::class)
+    @ExceptionHandler(UsernameTakenException::class, AuthenticationException::class,
+        BudgetAlreadyExistsException::class)
     fun handleBadRequestException(ex: Exception, request: WebRequest): ResponseEntity<String> {
         logError(ex.message, request.sessionId)
         return ResponseEntity.badRequest().body(ex.message)
+    }
+
+    @ExceptionHandler(UserNotAuthenticatedException::class, UsernameNotFoundException::class)
+    fun handleInternalServerErrorException(ex: Exception, request: WebRequest): ResponseEntity<String> {
+        logError(ex.message, request.sessionId)
+        return ResponseEntity.internalServerError().body(ex.message)
     }
 
     private fun logError(message: String?, sessionId: String) {
