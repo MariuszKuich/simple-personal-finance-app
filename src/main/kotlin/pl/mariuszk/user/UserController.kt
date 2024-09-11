@@ -21,7 +21,7 @@ class UserController(val userService: UserService) {
 
     @PostMapping("/login")
     fun login(@RequestBody userDto: UserCredentialsDto, request: HttpServletRequest,
-              response: HttpServletResponse): ResponseEntity<String> {
+              response: HttpServletResponse): ResponseEntity<Nothing> {
         userService.signIn(userDto, request, response)
         return ResponseEntity.ok().build()
     }

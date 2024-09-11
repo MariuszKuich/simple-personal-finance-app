@@ -17,14 +17,20 @@ class RestResponseEntityExceptionHandler(
     @ExceptionHandler(MethodArgumentNotValidException::class)
     fun handleMethodArgumentNotValidException(ex: MethodArgumentNotValidException,
                                               request: WebRequest): ResponseEntity<String> {
-        val errorMessage = StringBuilder("Provided input has the following errors:\n")
-        ex.bindingResult.fieldErrors.forEach { errorMessage.append("${it.defaultMessage}\n") }
-        return ResponseEntity.badRequest().body(errorMessage.toString())
+        val errorMessageBuilder = StringBuilder("Provided input has the following errors:\n")
+        ex.bindingResult.fieldErrors.forEach { errorMessageBuilder.append("${it.defaultMessage}\n") }
+        val errorMessage = errorMessageBuilder.toString()
+        logError(errorMessage, request.sessionId)
+        return ResponseEntity.badRequest().body(errorMessage)
     }
 
     @ExceptionHandler(UsernameTakenException::class, AuthenticationException::class)
     fun handleBadRequestException(ex: Exception, request: WebRequest): ResponseEntity<String> {
-        log.error("${ex.message} [sessionId=${request.sessionId}]")
+        logError(ex.message, request.sessionId)
         return ResponseEntity.badRequest().body(ex.message)
+    }
+
+    private fun logError(message: String?, sessionId: String) {
+        log.error("$message [sessionId=$sessionId]")
     }
 }

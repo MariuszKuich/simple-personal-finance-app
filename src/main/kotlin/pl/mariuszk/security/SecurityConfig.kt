@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.SecurityFilterChain
+import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository
 import org.springframework.security.web.context.SecurityContextRepository
 
@@ -25,6 +26,11 @@ class SecurityConfig {
                 it.requestMatchers("/api/public/**").permitAll()
                     .anyRequest().authenticated() }
             .securityContext { it.securityContextRepository(securityContextRepository()) }
+            .logout { it.logoutUrl("/api/public/logout")
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID")
+                .logoutSuccessHandler(HttpStatusReturningLogoutSuccessHandler())
+                .permitAll() }
             .build()
     }
 
