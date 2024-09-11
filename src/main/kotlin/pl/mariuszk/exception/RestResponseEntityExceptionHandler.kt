@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.context.request.WebRequest
 import pl.mariuszk.budget.exception.BudgetAlreadyExistsException
+import pl.mariuszk.budget.exception.BudgetNotFoundException
+import pl.mariuszk.budget.exception.IncorrectBudgetValueException
 import pl.mariuszk.config.logger
 import pl.mariuszk.user.exception.UserNotAuthenticatedException
 import pl.mariuszk.user.exception.UsernameNotFoundException
@@ -28,7 +30,7 @@ class RestResponseEntityExceptionHandler(
     }
 
     @ExceptionHandler(UsernameTakenException::class, AuthenticationException::class,
-        BudgetAlreadyExistsException::class)
+        BudgetAlreadyExistsException::class, BudgetNotFoundException::class, IncorrectBudgetValueException::class)
     fun handleBadRequestException(ex: Exception, request: WebRequest): ResponseEntity<String> {
         logError(ex.message, request.sessionId)
         return ResponseEntity.badRequest().body(ex.message)

@@ -16,7 +16,7 @@ data class Budget(
 
     @Column(name = "amount", nullable = false)
     @field:NotNull
-    val amount: BigDecimal,
+    var amount: BigDecimal,
 
     @Column(name = "for_date", nullable = false)
     @field:NotNull
@@ -26,4 +26,5 @@ data class Budget(
     @JoinColumn(name = "user_id")
     @field:NotNull
     @JsonIgnore
-    val user: User)
+    val user: User
+)

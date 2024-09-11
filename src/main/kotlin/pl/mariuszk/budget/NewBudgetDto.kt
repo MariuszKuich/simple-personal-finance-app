@@ -15,4 +15,5 @@ data class NewBudgetDto(
     @field:Max(value = 12, message = "Max value for month is 12")
     val month: Int,
 
-    val year: Int = LocalDate.now().year)
+    val year: Int = LocalDate.now().year
+)
